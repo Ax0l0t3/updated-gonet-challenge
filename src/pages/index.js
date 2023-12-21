@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import { Inter } from 'next/font/google'
-import styles from '../styles/button-style.module.css'
-import { LiComponent } from './LiComponent'
+import React, { useState, useEffect } from "react";
+import { Inter } from "next/font/google";
+import styles from "../styles/button-style.module.css";
+import { LiComponent } from "./LiComponent";
 
-export default function Home () {
-  const [inputValue, setInputValue] = useState('')
+export default function Home() {
+  const [inputValue, setInputValue] = useState("");
 
   const handleChange = (e) => {
-    setInputValue(e.target.value)
-  }
+    setInputValue(e.target.value);
+  };
 
-  async function logMovies () {
-    const response = await fetch('https://api.tvmaze.com/search/shows?q=all')
-    const jsonResponse = await response.json()
+  async function logMovies() {
+    const response = await fetch("https://api.tvmaze.com/search/shows?q=all");
+    const jsonResponse = await response.json();
   }
 
   useEffect(() => {
-    logMovies()
-  }, [])
+    logMovies();
+  }, []);
 
   return (
     <main className="flex flex-col h-screen justify-center items-center">
@@ -39,5 +39,5 @@ export default function Home () {
         <LiComponent />
       </ul>
     </main>
-  )
+  );
 }
