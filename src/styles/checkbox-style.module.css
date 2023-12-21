@@ -1,0 +1,28 @@
+.container{
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.thisInput{
+  display: none;
+}
+
+.forCheckbox{
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 25%;
+  left: 0;
+  border-width: 2px;
+  border-color: #E692A1;
+}
+
+.forCheckbox:hover{
+  background: #E6AA91;
+}
+
+.container input:checked ~ .forCheckbox{
+  background: #E691D3;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
