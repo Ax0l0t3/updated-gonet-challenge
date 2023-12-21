@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from '../styles/checkbox-style.module.css'
+import React from "react";
+import styles from "../styles/checkbox-style.module.css";
 
 export const LiComponent = () => {
   return (
@@ -13,5 +13,5 @@ export const LiComponent = () => {
         </label>
       </div>
     </li>
-  )
-}
+  );
+};
