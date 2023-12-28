@@ -1,5 +1,6 @@
-import React from "react";
-import styles from "../styles/checkbox-style.module.css";
+import React from 'react'
+import PropTypes from 'prop-types'
+import styles from '../styles/checkbox-style.module.css'
 
 export const LiComponent = ({ movieName, moviePicture }) => {
   return (
@@ -13,5 +14,10 @@ export const LiComponent = ({ movieName, moviePicture }) => {
         </label>
       </div>
     </li>
-  );
-};
+  )
+}
+
+LiComponent.propTypes = {
+  movieName: PropTypes.string,
+  moviePicture: PropTypes.string
+}
