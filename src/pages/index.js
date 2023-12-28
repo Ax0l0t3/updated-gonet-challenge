@@ -10,20 +10,22 @@ export default function Home() {
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
-    const newArray = movieArray.filter(movie => movie.name.toLowerCase().includes(e.target.value.toLowerCase()));
+    const newArray = movieArray.filter((movie) =>
+      movie.name.toLowerCase().includes(e.target.value.toLowerCase()),
+    );
     setSortedArray(newArray);
   };
 
   async function logMovies() {
     const response = await fetch("https://api.tvmaze.com/shows");
     const jsonResponse = await response.json();
-    jsonResponse.sort((firstMovie, secondMovie) =>{
+    jsonResponse.sort((firstMovie, secondMovie) => {
       const lowerCaseName = firstMovie.name.toLowerCase();
       const lowerCaseComparison = secondMovie.name.toLowerCase();
-      if(lowerCaseName < lowerCaseComparison) return -1;
-      if(lowerCaseName > lowerCaseComparison) return 1;
+      if (lowerCaseName < lowerCaseComparison) return -1;
+      if (lowerCaseName > lowerCaseComparison) return 1;
       return 0;
-    })
+    });
     setMovieArray(jsonResponse);
     setSortedArray(jsonResponse);
   }
@@ -47,7 +49,13 @@ export default function Home() {
       </button>
       <ul className="w-full h-full flex flex-col justify-between">
         {sortedArray.map((movie, index) => {
-          return <LiComponent key={index} movieName={movie.name} moviePicture={movie.image.medium}/>
+          return (
+            <LiComponent
+              key={index}
+              movieName={movie.name}
+              moviePicture={movie.image.medium}
+            />
+          );
         })}
       </ul>
     </main>

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../styles/checkbox-style.module.css";
 
-export const LiComponent = ({movieName, moviePicture}) => {
+export const LiComponent = ({ movieName, moviePicture }) => {
   return (
     <li>
       <div className="border-b-2 flex items-center">
