@@ -1,3 +1,4 @@
+/*THIS COMPONENT IS NOT IN USE FOR NOW*/
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "../styles/checkbox-style.module.css";
@@ -8,29 +9,21 @@ export const LiComponent = ({
   moviesArray,
   indexId,
   handleArray = Function.Prototype,
+  movie,
+  favouritesArray,
+  setFavouritesArray
 }) => {
-  const checkboxChange = (e) => {
-    const newArray = moviesArray.map((movie, index) =>
-      index === indexId ? { ...movie, favourites: e.target.checked } : movie,
-    );
-    handleArray(newArray);
-  };
+  
+  
+  
+  console.log('Rendered LiComponent');
 
   return (
-    <li>
-      <div className="border-b-2 flex items-center">
+      <div >
         <img className="mx-2 mb-1" src={moviePicture} />
         <p>{movieName}</p>
-        <label className={styles.container}>
-          <input
-            className={styles.thisInput}
-            type="checkbox"
-            onChange={checkboxChange}
-          />
-          <div className={styles.forCheckbox} />
-        </label>
+        
       </div>
-    </li>
   );
 };
 
