@@ -9,7 +9,6 @@ export default function Home() {
   const [viewFavourites, setViewFavourites] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [queMovie, setQueMovie] = useState([]);
-  const obj = { cancelProp: true, continueProp: false };
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
@@ -21,33 +20,31 @@ export default function Home() {
 
   const checkboxChange = (e, movie, index) => {
     // display a modal if the checkbox value changes from 'checked' to 'unchecked'
-    if(movie.favourite === true) setShowModal(true);
+    if (movie.favourite === true) setShowModal(true);
     // Adding the previous state of the movie to the que so it can be restored
     const arrayForQue = [...queMovie];
     arrayForQue[index] = movie;
     // Update the movie properties
-    const preArray = movieArray.map((singleElement, elementIndex) =>(
+    const preArray = movieArray.map((singleElement, elementIndex) =>
       elementIndex === index
         ? { ...singleElement, favourite: e.target.checked }
-        : singleElement
-    )
+        : singleElement,
     );
     setMovieArray(preArray);
     setQueMovie(arrayForQue);
   };
-  
-  const handleCancelClick = ()=>{
+
+  const handleCancelClick = () => {
     // If 'Cancel' is clicked then we restore the previous movie state
     const arrayForQue = [...movieArray];
-    const number1 = queMovie.findIndex(movie=> movie);
+    const number1 = queMovie.findIndex((movie) => movie);
     arrayForQue[number1] = queMovie[number1];
-    console.log('handleContinueClick', arrayForQue);
     setQueMovie([]);
     setShowModal(false);
     setMovieArray(arrayForQue);
   };
-  
-  const handleContinueClick = ()=>{
+
+  const handleContinueClick = () => {
     // If 'Continue' is clicked, then the change is kept and we clean the que array
     setQueMovie([]);
     setShowModal(false);
@@ -69,20 +66,18 @@ export default function Home() {
   useEffect(() => {
     logMovies();
   }, []);
-  
-  console.log(movieArray);
 
   return (
     <div className="flex justify-center">
-      {showModal &&
+      {showModal && (
         <ModalDialog
           alertMessage="Remove show from favourites?"
           primaryButtonText="Cancel"
           secondaryButtonText="Continue"
           handlePrimaryClick={handleCancelClick}
           handleSecondaryClick={handleContinueClick}
-          />
-      }
+        />
+      )}
       <main className="flex flex-col justify-center items-center w-9/12">
         <h1 className="text-5xl">My TV Shows</h1>
         <input
@@ -102,8 +97,9 @@ export default function Home() {
         <ul className="w-full h-full flex flex-col justify-between">
           {movieArray.map((movie, index) => {
             if (viewFavourites && !movie.favourite) return null;
-            if (!movie.name.toLowerCase().includes(inputValue.toLowerCase()))
+            if (!movie.name.toLowerCase().includes(inputValue.toLowerCase())) {
               return null;
+            }
             return (
               <li key={index} className="border-b-2 flex items-center">
                 <img className="mx-2 mb-1" src={movie.image.medium} />
