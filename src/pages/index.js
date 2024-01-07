@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createPortal } from 'react-dom';
+import { createPortal } from "react-dom";
 import styles from "../styles/button-style.module.css";
 import styles1 from "../styles/checkbox-style.module.css";
 import { ModalDialog } from "./ModalDialog";
@@ -70,16 +70,17 @@ export default function Home() {
 
   return (
     <div className="flex justify-center">
-      {showModal && createPortal(
-        <ModalDialog
-          alertMessage="Remove show from favourites?"
-          primaryButtonText="Cancel"
-          secondaryButtonText="Continue"
-          handlePrimaryClick={handleCancelClick}
-          handleSecondaryClick={handleContinueClick}
-        />,
-        document.body
-      )}
+      {showModal &&
+        createPortal(
+          <ModalDialog
+            alertMessage="Remove show from favourites?"
+            primaryButtonText="Cancel"
+            secondaryButtonText="Continue"
+            handlePrimaryClick={handleCancelClick}
+            handleSecondaryClick={handleContinueClick}
+          />,
+          document.body,
+        )}
       <main className="flex flex-col justify-center items-center w-9/12">
         <h1 className="text-5xl">My TV Shows</h1>
         <input
