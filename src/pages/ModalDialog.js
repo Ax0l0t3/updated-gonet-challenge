@@ -10,23 +10,25 @@ export const ModalDialog = ({
   secondaryButtonText,
 }) => {
   return (
-    <div className="absolute flex flex-col items-center shadow-lg shadow-[#FFDCD8] justify-center rounded-2xl bg-[#0D0708] text-[#FFDCD8] p-10 top-80">
-      <p className="mb-2">{alertMessage}</p>
-      <div className="flex justify-around w-full">
-        <button
-          className={styles.buttonStyle}
-          type="button"
-          onClick={handlePrimaryClick}
-        >
-          {primaryButtonText}
-        </button>
-        <button
-          className={styles.buttonStyle}
-          type="button"
-          onClick={handleSecondaryClick}
-        >
-          {secondaryButtonText}
-        </button>
+    <div className="h-full w-full fixed flex flex-col items-center justify-center rounded-2xl bg-[#FFDCD8]/90 text-[#0D0708] p-10 top-0">
+      <div>
+        <p className="mb-2">{alertMessage}</p>
+        <div className="flex justify-around w-full">
+          <button
+            className={styles.buttonStyle}
+            type="button"
+            onClick={handlePrimaryClick}
+          >
+            {primaryButtonText}
+          </button>
+          <button
+            className={styles.buttonStyle}
+            type="button"
+            onClick={handleSecondaryClick}
+          >
+            {secondaryButtonText}
+          </button>
+        </div>
       </div>
     </div>
   );
