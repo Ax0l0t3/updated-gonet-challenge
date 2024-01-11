@@ -53,15 +53,15 @@ export default function Home() {
     setQueMovie([]);
     setShowModal(false);
   };
-  
-  const handleClickName = movie => {
+
+  const handleClickName = (movie) => {
     setSingleMovie(movie);
     setShowMovieScreen(true);
-  }
-  
+  };
+
   const handleModalScreenClose = () => {
     setShowMovieScreen(false);
-  }
+  };
 
   async function logMovies() {
     const response = await fetch("https://api.tvmaze.com/shows");
@@ -92,26 +92,31 @@ export default function Home() {
             handleSecondaryClick={handleContinueClick}
           />,
           document.body,
-        )
-      }
+        )}
       {showMovieScreen &&
         createPortal(
-          <ModalScreen
-            handleCloseClick={handleModalScreenClose}
-          >
+          <ModalScreen handleCloseClick={handleModalScreenClose}>
             <h1>{singleMovie.name}</h1>
             <div className="flex justify-around h-full">
               <div>
-                <img className="h-full" src={singleMovie.image.medium} />
+                <img src={singleMovie.image.medium} />
               </div>
-              <div className="w-1/2 overflow-y-scroll">
-                {singleMovie.summary}
+              <div className="w-1/2 overflow-y-auto">
+                <p>{singleMovie.summary}</p>
               </div>
             </div>
+            {singleMovie.officialSite && (
+              <a
+                href={singleMovie.officialSite}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {singleMovie.officialSite}
+              </a>
+            )}
           </ModalScreen>,
           document.body,
-        )
-      }
+        )}
       <main className="flex flex-col justify-center items-center w-9/12">
         <h1 className="text-5xl">My TV Shows</h1>
         <input
@@ -137,7 +142,9 @@ export default function Home() {
             return (
               <li key={index} className="border-b-2 flex items-center">
                 <img className="mx-2 mb-1" src={movie.image.medium} />
-                <button type="button"onClick={()=>handleClickName(movie)}>{movie.name}</button>
+                <button type="button" onClick={() => handleClickName(movie)}>
+                  {movie.name}
+                </button>
                 <label className={styles1.container}>
                   <input
                     className={styles1.thisInput}
