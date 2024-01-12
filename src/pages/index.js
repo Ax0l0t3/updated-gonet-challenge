@@ -8,10 +8,10 @@ import { ModalScreen } from "./ModalScreen";
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [movieArray, setMovieArray] = useState([]);
-  const [viewFavourites, setViewFavourites] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showMovieScreen, setShowMovieScreen] = useState(false);
   const [singleMovie, setSingleMovie] = useState({});
+  const [viewFavourites, setViewFavourites] = useState(false);
 
   const addMovie = () => {
     const preArray = movieArray.map((singleElement) =>
@@ -22,17 +22,21 @@ export default function Home() {
     setMovieArray(preArray);
   };
 
-  const handleChange = (e) => setInputValue(e.target.value);
-
-  const handleButtonClick = () => setViewFavourites(!viewFavourites);
-
   const checkboxChange = (e, movie, index) => {
     setSingleMovie(movie);
   };
-
+  
+  const handleButtonClick = () => setViewFavourites(!viewFavourites);
+  
   const handleCancelClick = () => {
     setSingleMovie({});
     setShowModal(false);
+  };
+  const handleChange = (e) => setInputValue(e.target.value);
+
+  const handleClickName = (movie) => {
+    setSingleMovie(movie);
+    setShowMovieScreen(true);
   };
 
   const handleContinueClick = () => {
@@ -46,22 +50,17 @@ export default function Home() {
     setShowModal(false);
   };
 
-  const handleClickName = (movie) => {
-    setSingleMovie(movie);
-    setShowMovieScreen(true);
-  };
-
   const handleModalScreenClose = () => {
     setShowMovieScreen(false);
     setSingleMovie({});
   };
 
-  const modalRemoveFavourite = () => {
-    setShowModal(true);
-  };
-
   const modalAddFavourite = () => {
     addMovie();
+  };
+  
+  const modalRemoveFavourite = () => {
+    setShowModal(true);
   };
 
   async function logMovies() {
