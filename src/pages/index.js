@@ -11,46 +11,38 @@ export default function Home() {
   const [viewFavourites, setViewFavourites] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showMovieScreen, setShowMovieScreen] = useState(false);
-  const [queMovie, setQueMovie] = useState([]);
   const [singleMovie, setSingleMovie] = useState({});
 
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleButtonClick = () => {
-    setViewFavourites(!viewFavourites);
-  };
-
-  const checkboxChange = (e, movie, index) => {
-    // display a modal if the checkbox value changes from 'checked' to 'unchecked'
-    if (movie.favourite === true) setShowModal(true);
-    // Adding the previous state of the movie to the queMovie array so it can be restored
-    const arrayForQue = [...queMovie];
-    arrayForQue[index] = movie;
-    // Update the movie properties
-    const preArray = movieArray.map((singleElement, elementIndex) =>
-      elementIndex === index
-        ? { ...singleElement, favourite: e.target.checked }
+  const addMovie = () => {
+    const preArray = movieArray.map((singleElement) =>
+      singleElement.id === singleMovie.id
+        ? { ...singleElement, favourite: true }
         : singleElement,
     );
     setMovieArray(preArray);
-    setQueMovie(arrayForQue);
+  };
+
+  const handleChange = (e) => setInputValue(e.target.value);
+
+  const handleButtonClick = () => setViewFavourites(!viewFavourites);
+
+  const checkboxChange = (e, movie, index) => {
+    setSingleMovie(movie);
   };
 
   const handleCancelClick = () => {
-    // If 'Cancel' is clicked then we restore the previous movie state
-    const arrayForQue = [...movieArray];
-    const number1 = queMovie.findIndex((movie) => movie);
-    arrayForQue[number1] = queMovie[number1];
-    setQueMovie([]);
+    setSingleMovie({});
     setShowModal(false);
-    setMovieArray(arrayForQue);
   };
 
   const handleContinueClick = () => {
-    // If 'Continue' is clicked, then the change is kept and we clean the queMovie array
-    setQueMovie([]);
+    // If 'Continue' is clicked, then we remove the movie from favourites
+    const preArray = movieArray.map((singleElement) =>
+      singleElement.id === singleMovie.id
+        ? { ...singleElement, favourite: false }
+        : singleElement,
+    );
+    setMovieArray(preArray);
     setShowModal(false);
   };
 
@@ -61,6 +53,15 @@ export default function Home() {
 
   const handleModalScreenClose = () => {
     setShowMovieScreen(false);
+    setSingleMovie({});
+  };
+
+  const modalRemoveFavourite = () => {
+    setShowModal(true);
+  };
+
+  const modalAddFavourite = () => {
+    addMovie();
   };
 
   async function logMovies() {
@@ -80,6 +81,11 @@ export default function Home() {
     logMovies();
   }, []);
 
+  useEffect(() => {
+    if (!showMovieScreen && !singleMovie.favourite) addMovie();
+    if (!showMovieScreen && singleMovie.favourite) setShowModal(true);
+  }, [singleMovie]);
+
   return (
     <div className="flex justify-center">
       {showModal &&
@@ -97,14 +103,31 @@ export default function Home() {
         createPortal(
           <ModalScreen handleCloseClick={handleModalScreenClose}>
             <h1>{singleMovie.name}</h1>
-            <div className="flex justify-around h-full">
-              <div>
+            <div className="flex justify-center h-full overflow-hidden">
+              <div className="mr-4">
                 <img src={singleMovie.image.medium} />
               </div>
               <div className="w-1/2 overflow-y-auto">
                 <p>{singleMovie.summary}</p>
               </div>
             </div>
+            {singleMovie.favourite ? (
+              <button
+                className={styles.buttonStyle}
+                type="button"
+                onClick={modalRemoveFavourite}
+              >
+                Remove from favourites
+              </button>
+            ) : (
+              <button
+                className={styles.buttonStyle}
+                type="button"
+                onClick={modalAddFavourite}
+              >
+                Add to favourites
+              </button>
+            )}
             {singleMovie.officialSite && (
               <a
                 href={singleMovie.officialSite}
