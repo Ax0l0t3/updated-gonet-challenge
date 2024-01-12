@@ -3,52 +3,68 @@ import { createPortal } from "react-dom";
 import styles from "../styles/button-style.module.css";
 import styles1 from "../styles/checkbox-style.module.css";
 import { ModalDialog } from "./ModalDialog";
+import { ModalScreen } from "./ModalScreen";
+// Test change
+// Another test change
 
 export default function Home() {
   const [inputValue, setInputValue] = useState("");
   const [movieArray, setMovieArray] = useState([]);
-  const [viewFavourites, setViewFavourites] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [queMovie, setQueMovie] = useState([]);
+  const [showMovieScreen, setShowMovieScreen] = useState(false);
+  const [singleMovie, setSingleMovie] = useState({});
+  const [viewFavourites, setViewFavourites] = useState(false);
 
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleButtonClick = () => {
-    setViewFavourites(!viewFavourites);
-  };
-
-  const checkboxChange = (e, movie, index) => {
-    // display a modal if the checkbox value changes from 'checked' to 'unchecked'
-    if (movie.favourite === true) setShowModal(true);
-    // Adding the previous state of the movie to the queMovie array so it can be restored
-    const arrayForQue = [...queMovie];
-    arrayForQue[index] = movie;
-    // Update the movie properties
-    const preArray = movieArray.map((singleElement, elementIndex) =>
-      elementIndex === index
-        ? { ...singleElement, favourite: e.target.checked }
+  const addMovie = () => {
+    const preArray = movieArray.map((singleElement) =>
+      singleElement.id === singleMovie.id
+        ? { ...singleElement, favourite: true }
         : singleElement,
     );
     setMovieArray(preArray);
-    setQueMovie(arrayForQue);
   };
 
+  const checkboxChange = (e, movie, index) => {
+    setSingleMovie(movie);
+  };
+  
+  const handleButtonClick = () => setViewFavourites(!viewFavourites);
+  
   const handleCancelClick = () => {
-    // If 'Cancel' is clicked then we restore the previous movie state
-    const arrayForQue = [...movieArray];
-    const number1 = queMovie.findIndex((movie) => movie);
-    arrayForQue[number1] = queMovie[number1];
-    setQueMovie([]);
+    if(!showMovieScreen) setSingleMovie({});
     setShowModal(false);
-    setMovieArray(arrayForQue);
+  };
+  const handleChange = (e) => setInputValue(e.target.value);
+
+  const handleClickName = (movie) => {
+    setSingleMovie(movie);
+    setShowMovieScreen(true);
   };
 
   const handleContinueClick = () => {
-    // If 'Continue' is clicked, then the change is kept and we clean the queMovie array
-    setQueMovie([]);
+    // If 'Continue' is clicked, then we remove the movie from favourites
+    const preArray = movieArray.map((singleElement) =>
+      singleElement.id === singleMovie.id
+        ? { ...singleElement, favourite: false }
+        : singleElement,
+    );
+    setMovieArray(preArray);
     setShowModal(false);
+    if(showMovieScreen) setShowMovieScreen(!showMovieScreen);
+  };
+
+  const handleModalScreenClose = () => {
+    setShowMovieScreen(false);
+    setSingleMovie({});
+  };
+
+  const modalAddFavourite = () => {
+    addMovie();
+    if(showMovieScreen) setShowMovieScreen(!showMovieScreen);
+  };
+  
+  const modalRemoveFavourite = () => {
+    setShowModal(true);
   };
 
   async function logMovies() {
@@ -68,6 +84,11 @@ export default function Home() {
     logMovies();
   }, []);
 
+  useEffect(() => {
+    if (!showMovieScreen && !singleMovie.favourite) addMovie();
+    if (!showMovieScreen && singleMovie.favourite) setShowModal(true);
+  }, [singleMovie]);
+
   return (
     <div className="flex justify-center">
       {showModal &&
@@ -79,6 +100,47 @@ export default function Home() {
             handlePrimaryClick={handleCancelClick}
             handleSecondaryClick={handleContinueClick}
           />,
+          document.body,
+        )}
+      {showMovieScreen &&
+        createPortal(
+          <ModalScreen handleCloseClick={handleModalScreenClose}>
+            <h1>{singleMovie.name}</h1>
+            <div className="flex justify-center h-full overflow-hidden">
+              <div className="mr-4">
+                <img src={singleMovie.image.medium} />
+              </div>
+              <div className="w-1/2 overflow-y-auto">
+                <p>{singleMovie.summary}</p>
+              </div>
+            </div>
+            {singleMovie.favourite ? (
+              <button
+                className={styles.buttonStyle}
+                type="button"
+                onClick={modalRemoveFavourite}
+              >
+                Remove from favourites
+              </button>
+            ) : (
+              <button
+                className={styles.buttonStyle}
+                type="button"
+                onClick={modalAddFavourite}
+              >
+                Add to favourites
+              </button>
+            )}
+            {singleMovie.officialSite && (
+              <a
+                href={singleMovie.officialSite}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {singleMovie.officialSite}
+              </a>
+            )}
+          </ModalScreen>,
           document.body,
         )}
       <main className="flex flex-col justify-center items-center w-9/12">
@@ -106,7 +168,9 @@ export default function Home() {
             return (
               <li key={index} className="border-b-2 flex items-center">
                 <img className="mx-2 mb-1" src={movie.image.medium} />
-                <p>{movie.name}</p>
+                <button type="button" onClick={() => handleClickName(movie)}>
+                  {movie.name}
+                </button>
                 <label className={styles1.container}>
                   <input
                     className={styles1.thisInput}
