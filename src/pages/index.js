@@ -29,7 +29,7 @@ export default function Home() {
   const handleButtonClick = () => setViewFavourites(!viewFavourites);
   
   const handleCancelClick = () => {
-    setSingleMovie({});
+    if(!showMovieScreen) setSingleMovie({});
     setShowModal(false);
   };
   const handleChange = (e) => setInputValue(e.target.value);
@@ -48,6 +48,7 @@ export default function Home() {
     );
     setMovieArray(preArray);
     setShowModal(false);
+    if(showMovieScreen) setShowMovieScreen(!showMovieScreen);
   };
 
   const handleModalScreenClose = () => {
@@ -57,6 +58,7 @@ export default function Home() {
 
   const modalAddFavourite = () => {
     addMovie();
+    if(showMovieScreen) setShowMovieScreen(!showMovieScreen);
   };
   
   const modalRemoveFavourite = () => {
